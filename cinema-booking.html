@@ -13,35 +13,38 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2d2d2d 100%);
             min-height: 100vh;
             color: white;
         }
 
         .header {
-            background: rgba(0, 0, 0, 0.8);
+            background: linear-gradient(135deg, #111111 0%, #000000 100%);
             padding: 20px;
             text-align: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+            border-bottom: 1px solid #333;
         }
 
         .theater-name {
             font-size: 2.5em;
             font-weight: bold;
-            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+            background: linear-gradient(45deg, #ff0080, #00d4ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(255, 0, 128, 0.3);
         }
 
         .movie-title {
             font-size: 1.8em;
-            color: #ffd93d;
+            color: #00d4ff;
             margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
         }
 
         .show-info {
-            color: #ccc;
+            color: #888;
             font-size: 1.1em;
         }
 
@@ -52,18 +55,19 @@
         }
 
         .screen-section {
-            background: rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, rgba(20, 20, 20, 0.9) 0%, rgba(40, 40, 40, 0.8) 100%);
+            border: 1px solid #333;
             border-radius: 20px;
             padding: 30px;
             margin-bottom: 30px;
             backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
         }
 
         .screen {
             width: 100%;
             height: 60px;
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            background: linear-gradient(45deg, #ff0080, #8000ff);
             border-radius: 30px;
             display: flex;
             align-items: center;
@@ -72,8 +76,9 @@
             font-size: 1.5em;
             font-weight: bold;
             margin-bottom: 40px;
-            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
+            box-shadow: 0 10px 25px rgba(255, 0, 128, 0.6);
             position: relative;
+            border: 2px solid #333;
         }
 
         .screen::before {
@@ -86,7 +91,7 @@
             height: 0;
             border-left: 15px solid transparent;
             border-right: 15px solid transparent;
-            border-top: 20px solid #ff6b6b;
+            border-top: 20px solid #ff0080;
         }
 
         .seating-area {
@@ -107,7 +112,8 @@
             font-size: 1.2em;
             width: 30px;
             text-align: center;
-            color: #ffd93d;
+            color: #00d4ff;
+            text-shadow: 0 0 5px rgba(0, 212, 255, 0.5);
         }
 
         .seat {
@@ -122,39 +128,46 @@
             font-weight: bold;
             transition: all 0.3s ease;
             position: relative;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
+            border: 1px solid #444;
         }
 
         .seat.available {
-            background: linear-gradient(45deg, #2ecc71, #27ae60);
-            color: white;
+            background: linear-gradient(45deg, #1a1a1a, #333);
+            color: #00d4ff;
+            border: 1px solid #00d4ff;
         }
 
         .seat.available:hover {
             transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.5);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.8);
+            background: linear-gradient(45deg, #002a33, #004a5c);
         }
 
         .seat.selected {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            background: linear-gradient(45deg, #ff0080, #8000ff);
             color: white;
             transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
+            box-shadow: 0 6px 20px rgba(255, 0, 128, 0.8);
+            border: 2px solid #ff0080;
         }
 
         .seat.booked {
-            background: linear-gradient(45deg, #95a5a6, #7f8c8d);
-            color: #2c3e50;
+            background: linear-gradient(45deg, #444, #666);
+            color: #999;
             cursor: not-allowed;
+            border: 1px solid #555;
         }
 
         .seat.premium {
-            background: linear-gradient(45deg, #9b59b6, #8e44ad);
-            color: white;
+            background: linear-gradient(45deg, #2a1a4a, #4a2a8a);
+            color: #ffaa00;
+            border: 1px solid #ffaa00;
         }
 
         .seat.premium.selected {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            background: linear-gradient(45deg, #ff0080, #8000ff);
+            border: 2px solid #ff0080;
         }
 
         .aisle {
@@ -188,11 +201,12 @@
         }
 
         .booking-panel {
-            background: rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, rgba(20, 20, 20, 0.9) 0%, rgba(40, 40, 40, 0.8) 100%);
+            border: 1px solid #333;
             border-radius: 20px;
             padding: 30px;
             backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
             position: sticky;
             top: 20px;
         }
@@ -209,15 +223,16 @@
         }
 
         .selected-seat-item {
-            background: rgba(255, 107, 107, 0.2);
+            background: rgba(255, 0, 128, 0.2);
             padding: 5px 12px;
             border-radius: 15px;
             font-size: 0.9em;
-            border: 2px solid #ff6b6b;
+            border: 2px solid #ff0080;
+            color: #ff0080;
         }
 
         .price-breakdown {
-            border-top: 2px solid rgba(255, 255, 255, 0.2);
+            border-top: 2px solid #333;
             padding-top: 20px;
             margin-top: 20px;
         }
@@ -232,34 +247,37 @@
         .total-price {
             font-size: 1.5em;
             font-weight: bold;
-            color: #ffd93d;
-            border-top: 2px solid #ffd93d;
+            color: #00d4ff;
+            border-top: 2px solid #00d4ff;
             padding-top: 15px;
             margin-top: 15px;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
         }
 
         .book-button {
             width: 100%;
             padding: 15px;
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            background: linear-gradient(45deg, #ff0080, #8000ff);
             color: white;
-            border: none;
+            border: 2px solid #ff0080;
             border-radius: 25px;
             font-size: 1.2em;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
             margin-top: 20px;
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+            box-shadow: 0 6px 20px rgba(255, 0, 128, 0.6);
         }
 
         .book-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.6);
+            box-shadow: 0 8px 25px rgba(255, 0, 128, 0.8);
+            background: linear-gradient(45deg, #cc0066, #6600cc);
         }
 
         .book-button:disabled {
-            background: #7f8c8d;
+            background: linear-gradient(45deg, #444, #666);
+            border: 2px solid #555;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
@@ -354,19 +372,19 @@
                 
                 <div class="legend">
                     <div class="legend-item">
-                        <div class="legend-seat" style="background: linear-gradient(45deg, #2ecc71, #27ae60);"></div>
+                        <div class="legend-seat" style="background: linear-gradient(45deg, #1a1a1a, #333); border: 1px solid #00d4ff; color: #00d4ff;"></div>
                         <span>Available</span>
                     </div>
                     <div class="legend-item">
-                        <div class="legend-seat" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24);"></div>
+                        <div class="legend-seat" style="background: linear-gradient(45deg, #ff0080, #8000ff); border: 2px solid #ff0080;"></div>
                         <span>Selected</span>
                     </div>
                     <div class="legend-item">
-                        <div class="legend-seat" style="background: linear-gradient(45deg, #95a5a6, #7f8c8d);"></div>
+                        <div class="legend-seat" style="background: linear-gradient(45deg, #444, #666); border: 1px solid #555; color: #999;"></div>
                         <span>Booked</span>
                     </div>
                     <div class="legend-item">
-                        <div class="legend-seat" style="background: linear-gradient(45deg, #9b59b6, #8e44ad);"></div>
+                        <div class="legend-seat" style="background: linear-gradient(45deg, #2a1a4a, #4a2a8a); border: 1px solid #ffaa00; color: #ffaa00;"></div>
                         <span>Premium</span>
                     </div>
                 </div>
