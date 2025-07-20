@@ -101,6 +101,18 @@
         .canvas-container {
             text-align: center;
             position: relative;
+            overflow: auto;
+            max-height: 600px;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            background: #f8f9fa;
+        }
+
+        .canvas-wrapper {
+            display: inline-block;
+            position: relative;
+            transition: transform 0.3s ease;
+            transform-origin: center center;
         }
 
         canvas {
@@ -109,7 +121,7 @@
             cursor: crosshair;
             background: white;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            max-width: 100%;
+            display: block;
         }
 
         .controls {
@@ -226,6 +238,18 @@
             </div>
 
             <div class="tool-group">
+                <label>View</label>
+                <div class="controls">
+                    <button id="zoomIn" style="background: linear-gradient(45deg, #2ecc71, #27ae60);">🔍+ Zoom In</button>
+                    <button id="zoomOut" style="background: linear-gradient(45deg, #f39c12, #e67e22);">🔍- Zoom Out</button>
+                    <button id="resetZoom" style="background: linear-gradient(45deg, #9b59b6, #8e44ad);">🎯 Reset</button>
+                </div>
+                <div style="margin-top: 8px;">
+                    <span class="size-display" id="zoomDisplay">100%</span>
+                </div>
+            </div>
+
+            <div class="tool-group">
                 <label>Actions</label>
                 <div class="controls">
                     <button id="clearCanvas" style="background: linear-gradient(45deg, #e74c3c, #c0392b);">🗑️ Clear</button>
@@ -234,8 +258,10 @@
             </div>
         </div>
 
-        <div class="canvas-container">
-            <canvas id="canvas" width="800" height="500"></canvas>
+        <div class="canvas-container" id="canvasContainer">
+            <div class="canvas-wrapper" id="canvasWrapper">
+                <canvas id="canvas" width="800" height="500"></canvas>
+            </div>
         </div>
     </div>
 
@@ -244,6 +270,8 @@
             constructor() {
                 this.canvas = document.getElementById('canvas');
                 this.ctx = this.canvas.getContext('2d');
+                this.canvasWrapper = document.getElementById('canvasWrapper');
+                this.canvasContainer = document.getElementById('canvasContainer');
                 this.isDrawing = false;
                 this.currentTool = 'brush';
                 this.currentColor = '#ff6b6b';
@@ -251,6 +279,10 @@
                 this.rainbowMode = false;
                 this.patternMode = false;
                 this.rainbowHue = 0;
+                this.zoomLevel = 1;
+                this.minZoom = 0.25;
+                this.maxZoom = 5;
+                this.zoomStep = 0.25;
                 
                 this.setupEventListeners();
                 this.setupCanvas();
@@ -260,14 +292,13 @@
                 this.ctx.lineCap = 'round';
                 this.ctx.lineJoin = 'round';
                 
+                // Initialize zoom display
+                this.updateZoom();
+                
                 // Make canvas responsive
                 const resizeCanvas = () => {
-                    const container = this.canvas.parentElement;
-                    const maxWidth = container.clientWidth - 40;
-                    if (maxWidth < 800) {
-                        this.canvas.style.width = maxWidth + 'px';
-                        this.canvas.style.height = (maxWidth * 500 / 800) + 'px';
-                    }
+                    // Canvas now maintains its size but container can scroll
+                    this.updateZoom();
                 };
                 
                 window.addEventListener('resize', resizeCanvas);
@@ -326,6 +357,14 @@
                     this.updatePatternButton();
                 });
 
+                // Zoom controls
+                document.getElementById('zoomIn').addEventListener('click', this.zoomIn.bind(this));
+                document.getElementById('zoomOut').addEventListener('click', this.zoomOut.bind(this));
+                document.getElementById('resetZoom').addEventListener('click', this.resetZoom.bind(this));
+
+                // Mouse wheel zoom
+                this.canvasContainer.addEventListener('wheel', this.handleWheel.bind(this));
+
                 // Actions
                 document.getElementById('clearCanvas').addEventListener('click', this.clearCanvas.bind(this));
                 document.getElementById('saveImage').addEventListener('click', this.saveImage.bind(this));
@@ -355,6 +394,48 @@
                     x: (e.clientX - rect.left) * scaleX,
                     y: (e.clientY - rect.top) * scaleY
                 };
+            }
+
+            zoomIn() {
+                if (this.zoomLevel < this.maxZoom) {
+                    this.zoomLevel += this.zoomStep;
+                    this.updateZoom();
+                }
+            }
+
+            zoomOut() {
+                if (this.zoomLevel > this.minZoom) {
+                    this.zoomLevel -= this.zoomStep;
+                    this.updateZoom();
+                }
+            }
+
+            resetZoom() {
+                this.zoomLevel = 1;
+                this.updateZoom();
+                // Center the canvas
+                this.canvasContainer.scrollLeft = (this.canvasContainer.scrollWidth - this.canvasContainer.clientWidth) / 2;
+                this.canvasContainer.scrollTop = (this.canvasContainer.scrollHeight - this.canvasContainer.clientHeight) / 2;
+            }
+
+            updateZoom() {
+                this.canvasWrapper.style.transform = `scale(${this.zoomLevel})`;
+                document.getElementById('zoomDisplay').textContent = Math.round(this.zoomLevel * 100) + '%';
+                
+                // Update cursor size based on zoom level
+                const cursorSize = Math.max(1, this.currentSize * this.zoomLevel);
+                this.canvas.style.cursor = this.currentTool === 'eraser' ? 'crosshair' : 
+                    `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="${cursorSize}" height="${cursorSize}" viewBox="0 0 ${cursorSize} ${cursorSize}"><circle cx="${cursorSize/2}" cy="${cursorSize/2}" r="${cursorSize/2-1}" fill="none" stroke="black" stroke-width="1"/></svg>') ${cursorSize/2} ${cursorSize/2}, crosshair`;
+            }
+
+            handleWheel(e) {
+                e.preventDefault();
+                
+                if (e.deltaY < 0) {
+                    this.zoomIn();
+                } else {
+                    this.zoomOut();
+                }
             }
 
             startDrawing(e) {
@@ -477,6 +558,7 @@
                 this.currentTool = tool;
                 document.querySelectorAll('.toolbar button').forEach(btn => btn.classList.remove('active'));
                 document.getElementById(tool + 'Tool').classList.add('active');
+                this.updateZoom(); // Update cursor when tool changes
             }
 
             updateRainbowButton() {
